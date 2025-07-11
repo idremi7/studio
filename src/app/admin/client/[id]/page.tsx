@@ -19,8 +19,9 @@ import { Badge } from "@/components/ui/badge";
 import { clients, protocols, badges, discountTiers, DISCOUNT_THRESHOLD } from "@/lib/data";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, CheckCircle2, User, BrainCircuit } from "lucide-react";
+import { PlusCircle, CheckCircle2, User, BrainCircuit, Users } from "lucide-react";
 import AddStepDialog from "./_components/AddStepDialog";
+import Link from "next/link";
 
 export default function ClientDetailPage({ params }: { params: { id: string } }) {
   const client = clients.find((c) => c.id === params.id);
@@ -35,6 +36,8 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
     // Or render a message indicating no protocol is assigned
     notFound();
   }
+  
+  const referrer = client.referrerId ? clients.find(c => c.id === client.referrerId) : null;
 
   const progressPercentage = Math.min((client.neuroPoints / DISCOUNT_THRESHOLD) * 100, 100);
 
@@ -77,6 +80,25 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
                     <p className="text-xs text-muted-foreground">
                        {client.currentDiscountLevel > 0 ? `Niveau ${client.currentDiscountLevel}` : 'Niveau 0'}
                     </p>
+                </CardContent>
+            </Card>
+             <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Parrain</CardTitle>
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    {referrer ? (
+                         <>
+                            <div className="text-xl font-bold">{referrer.name}</div>
+                            <Button asChild variant="link" size="sm" className="p-0 h-auto">
+                                <Link href={`/admin/client/${referrer.id}`} className="text-xs text-muted-foreground">Voir le profil</Link>
+                            </Button>
+                        </>
+                    ) : (
+                         <div className="text-lg font-semibold text-muted-foreground">Aucun</div>
+                    )}
+                   
                 </CardContent>
             </Card>
         </div>

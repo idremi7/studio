@@ -87,6 +87,10 @@ export default function LoginPage() {
                 <Label htmlFor="password-register">Mot de passe</Label>
                 <Input id="password-register" type="password" required />
               </div>
+               <div className="space-y-2">
+                <Label htmlFor="referral-code">Code de parrainage (Optionnel)</Label>
+                <Input id="referral-code" type="text" placeholder="ALICE123" />
+              </div>
             </CardContent>
             <CardFooter>
               <Button className="w-full" asChild>

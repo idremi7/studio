@@ -9,6 +9,8 @@ import { revalidatePath } from "next/cache";
 import { clients, protocols } from "@/lib/data";
 import type { Step } from "@/lib/types";
 
+const REFERRAL_BONUS_POINTS = 100; // Points awarded to the referrer
+
 /**
  * Marks a step as complete for a client, awards points, and checks for discounts.
  * This function is intended to be called by an admin.
@@ -52,8 +54,19 @@ export async function completeStep(formData: FormData) {
   const pointsAwarded = step.points + (step.bonusPoints || 0);
   client.neuroPoints += pointsAwarded;
   console.log(`Awarded ${pointsAwarded} points. New total: ${client.neuroPoints}`);
+
+  // 3. Handle referral bonus
+  if (client.referrerId) {
+    const referrer = clients.find(c => c.id === client.referrerId);
+    if (referrer) {
+      referrer.neuroPoints += REFERRAL_BONUS_POINTS;
+      console.log(`Awarded ${REFERRAL_BONUS_POINTS} referral bonus points to ${referrer.name}.`);
+      // In a real app, you might want to revalidate the referrer's page too.
+      // revalidatePath(`/admin/client/${referrer.id}`);
+    }
+  }
   
-  // 3. Check for discount
+  // 4. Check for discount
   if (client.neuroPoints >= 8000) {
     console.log("Discount threshold reached. Applying discount.");
     client.neuroPoints -= 8000;
@@ -61,7 +74,7 @@ export async function completeStep(formData: FormData) {
     // In a real app, you'd log this event to a 'discounts' collection.
   }
 
-  // 4. Check for badge unlocks (simplified logic)
+  // 5. Check for badge unlocks (simplified logic)
   if (!client.unlockedBadgeIds.includes('starter')) {
     client.unlockedBadgeIds.push('starter');
   }
@@ -85,12 +98,29 @@ export async function completeStep(formData: FormData) {
  * @returns A promise that resolves with a success or error message.
  */
 export async function assignReferral(clientId: string, referrerCode: string) {
-  console.log(`Assigning referrer with code ${referrerCode} to client ${clientId}`);
-  // In a real app:
-  // 1. Find user with matching referralCode.
-  // 2. If found, update the current client's `referrerId`.
-  // 3. Handle cases where code is not found or client already has a referrer.
-  return { success: true, message: "Parrain assigné." };
+  const client = clients.find(c => c.id === clientId);
+  if (!client) {
+    return { success: false, message: "Client non trouvé." };
+  }
+
+  if (client.referrerId) {
+     return { success: false, message: "Ce client a déjà un parrain." };
+  }
+
+  const referrer = clients.find(c => c.referralCode.toUpperCase() === referrerCode.toUpperCase());
+  if (!referrer) {
+    return { success: false, message: "Code de parrainage invalide." };
+  }
+
+  if (referrer.id === client.id) {
+    return { success: false, message: "Vous ne pouvez pas vous parrainer vous-même." };
+  }
+  
+  client.referrerId = referrer.id;
+  console.log(`Client ${client.name} is now referred by ${referrer.name}`);
+  revalidatePath(`/admin/client/${clientId}`);
+
+  return { success: true, message: `Parrain ${referrer.name} assigné avec succès.` };
 }
 
 /**
