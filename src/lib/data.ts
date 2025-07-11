@@ -12,8 +12,8 @@ export const badges: Badge[] = [
 
 export const protocols: Protocol[] = [
   {
-    id: 'adhd-standard',
-    name: 'Protocole standard TDAH',
+    id: '1',
+    name: 'Protocole 1',
     steps: [
       { id: 1, name: 'Rencontre initiale', description: 'Première consultation et évaluation', points: 500 },
       { id: 2, name: 'Évaluation EEG', description: 'Enregistrement de l\'activité cérébrale', points: 1000, bonusPoints: 250 },
@@ -32,8 +32,8 @@ export const protocols: Protocol[] = [
     ],
   },
   {
-    id: 'anxiety-basic',
-    name: 'Protocole anxiété (base)',
+    id: '2',
+    name: 'Protocole 2',
     steps: [
         { id: 1, name: 'Consultation Initiale', description: 'Discussion des objectifs et évaluation', points: 500 },
         { id: 2, name: 'Session de relaxation 1', description: 'Apprentissage des techniques de base', points: 700 },
@@ -53,7 +53,7 @@ export const clients: User[] = [
     currentDiscountLevel: 0,
     unlockedBadgeIds: ['starter', 'session-master'],
     completedStepIds: [1, 2, 3, 4, 5, 6, 7],
-    protocolId: 'adhd-standard',
+    protocolId: '1',
     referralCode: 'ALICE123',
     imageUrl: 'https://i.pravatar.cc/40?u=alice'
   },
@@ -66,7 +66,7 @@ export const clients: User[] = [
     currentDiscountLevel: 0,
     unlockedBadgeIds: ['starter'],
     completedStepIds: [1, 2, 3],
-    protocolId: 'adhd-standard',
+    protocolId: '1',
     referralCode: 'BOB456',
     referrerId: 'client1',
     imageUrl: 'https://i.pravatar.cc/40?u=bob'
@@ -80,7 +80,7 @@ export const clients: User[] = [
     currentDiscountLevel: 1, // Already got one discount
     unlockedBadgeIds: ['starter', 'session-master', 'discount-achiever'],
     completedStepIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-    protocolId: 'adhd-standard',
+    protocolId: '1',
     referralCode: 'CARLA789',
   }
 ];
