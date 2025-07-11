@@ -1,4 +1,4 @@
-# **App Name**: NeuroProgress
+# **App Name**: DepartNeuro
 
 ## Core Features:
 
