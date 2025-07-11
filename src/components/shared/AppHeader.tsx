@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { BrainCircuit, LayoutDashboard, LogOut, Settings, UserCircle, Shield } from 'lucide-react';
+import { BrainCircuit, LayoutDashboard, LogOut, Settings, UserCircle, Shield, ListChecks } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -57,6 +57,14 @@ export function AppHeader() {
         >
           Tableau de bord
         </Link>
+        {user.role === 'admin' && (
+             <Link
+                href="/admin/protocols"
+                className="text-muted-foreground transition-colors hover:text-foreground"
+             >
+                Protocoles
+            </Link>
+        )}
       </nav>
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
         <div className="ml-auto flex-1 sm:flex-initial"></div>
@@ -82,9 +90,14 @@ export function AppHeader() {
                 </DropdownMenuItem>
             )}
              {user.role === 'admin' && (
+                <>
                 <DropdownMenuItem asChild>
                     <Link href="/admin"><Shield className="mr-2 h-4 w-4" />Portail Admin</Link>
                 </DropdownMenuItem>
+                 <DropdownMenuItem asChild>
+                    <Link href="/admin/protocols"><ListChecks className="mr-2 h-4 w-4" />Gérer les protocoles</Link>
+                </DropdownMenuItem>
+                </>
             )}
             <DropdownMenuItem>
               <Settings className="mr-2 h-4 w-4" />

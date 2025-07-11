@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 
 // DUMMY DATA MODIFICATION - In a real app, this would be a database call
 import { clients, protocol } from "@/lib/data";
+import type { Step } from "@/lib/types";
 
 /**
  * Marks a step as complete for a client, awards points, and checks for discounts.
@@ -80,4 +81,63 @@ export async function assignReferral(clientId: string, referrerCode: string) {
   // 2. If found, update the current client's `referrerId`.
   // 3. Handle cases where code is not found or client already has a referrer.
   return { success: true, message: "Parrain assigné." };
+}
+
+
+/**
+ * Updates the name of a protocol.
+ */
+export async function updateProtocolName(formData: FormData) {
+  const protocolId = formData.get("protocolId") as string;
+  const newName = formData.get("name") as string;
+
+  if (protocol.id === protocolId) {
+    protocol.name = newName;
+    revalidatePath("/admin/protocols");
+    return { success: true, message: "Le nom du protocole a été mis à jour." };
+  }
+  return { success: false, message: "Protocole non trouvé." };
+}
+
+/**
+ * Adds or updates a step in a protocol.
+ */
+export async function saveProtocolStep(formData: FormData) {
+  const protocolId = formData.get("protocolId") as string;
+  const stepId = formData.get("stepId") ? Number(formData.get("stepId")) : null;
+  const name = formData.get("name") as string;
+  const description = formData.get("description") as string;
+  const points = Number(formData.get("points"));
+  const bonusPoints = formData.get("bonusPoints") ? Number(formData.get("bonusPoints")) : 0;
+
+  if (protocol.id !== protocolId) {
+    return { success: false, message: "Protocole non trouvé." };
+  }
+
+  const stepData: Partial<Step> = {
+    name,
+    description,
+    points,
+    bonusPoints: bonusPoints || undefined,
+  };
+
+  if (stepId) {
+    // Update existing step
+    const stepIndex = protocol.steps.findIndex((s) => s.id === stepId);
+    if (stepIndex > -1) {
+      protocol.steps[stepIndex] = { ...protocol.steps[stepIndex], ...stepData };
+       revalidatePath("/admin/protocols");
+      return { success: true, message: "L'étape a été mise à jour." };
+    }
+    return { success: false, message: "Étape non trouvée." };
+  } else {
+    // Add new step
+    const newStep: Step = {
+      id: Math.max(...protocol.steps.map(s => s.id)) + 1,
+      ...stepData,
+    } as Step;
+    protocol.steps.push(newStep);
+    revalidatePath("/admin/protocols");
+    return { success: true, message: "Une nouvelle étape a été ajoutée." };
+  }
 }
