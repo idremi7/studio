@@ -17,7 +17,7 @@ const fontPtSans = PT_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'NeuroProgress',
+  title: 'DepartNeuro',
   description: 'Suivez votre progression en neurofeedback et débloquez des récompenses.',
 };
 

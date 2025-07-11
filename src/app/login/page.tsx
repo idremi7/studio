@@ -25,7 +25,7 @@ export default function LoginPage() {
       <div className="mb-8 text-center">
         <Link href="/" className="flex items-center justify-center gap-2 mb-2">
             <BrainCircuit className="h-10 w-10 text-primary" />
-            <h1 className="text-3xl font-bold font-headline text-primary">NeuroProgress</h1>
+            <h1 className="text-3xl font-bold font-headline text-primary">DepartNeuro</h1>
         </Link>
         <p className="text-muted-foreground">Connectez-vous pour suivre votre parcours</p>
       </div>

@@ -27,7 +27,7 @@ export default function Home() {
               Votre Parcours Neurofeedback, Simplifié.
             </h2>
             <p className="max-w-3xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
-              Suivez votre progression, gagnez des points, débloquez des récompenses et atteignez vos objectifs avec NeuroProgress.
+              Suivez votre progression, gagnez des points, débloquez des récompenses et atteignez vos objectifs avec DepartNeuro.
             </p>
             <Button asChild size="lg">
               <Link href="/login">Rejoindre le programme</Link>
@@ -89,7 +89,7 @@ export default function Home() {
       </main>
       <footer className="py-6 border-t bg-secondary/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} NeuroProgress. Tous droits réservés.</p>
+          <p>&copy; {new Date().getFullYear()} DepartNeuro. Tous droits réservés.</p>
         </div>
       </footer>
     </div>

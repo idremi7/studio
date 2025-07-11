@@ -75,7 +75,7 @@ export const admins: User[] = [
     {
         id: 'admin1',
         name: 'Dr. Eve Adam',
-        email: 'eve.adam@neuroprogress.com',
+        email: 'eve.adam@departneuro.com',
         role: 'admin',
         neuroPoints: 0,
         currentDiscountLevel: 0,
