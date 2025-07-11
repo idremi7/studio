@@ -6,6 +6,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  imageUrl?: string;
   role: UserRole;
   neuroPoints: number;
   currentDiscountLevel: number; // 0 for 15%, 1 for 18%, etc.

@@ -72,7 +72,7 @@ export function AppHeader() {
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" size="icon" className="rounded-full">
               <Avatar>
-                <AvatarImage src={`https://placehold.co/40x40.png`} alt={user.name} />
+                <AvatarImage src={user.imageUrl} alt={user.name} />
                 <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <span className="sr-only">Toggle user menu</span>

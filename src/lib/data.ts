@@ -55,6 +55,7 @@ export const clients: User[] = [
     completedStepIds: [1, 2, 3, 4, 5, 6, 7],
     protocolId: 'adhd-standard',
     referralCode: 'ALICE123',
+    imageUrl: 'https://i.pravatar.cc/40?u=alice'
   },
   {
     id: 'client2',
@@ -68,6 +69,7 @@ export const clients: User[] = [
     protocolId: 'adhd-standard',
     referralCode: 'BOB456',
     referrerId: 'client1',
+    imageUrl: 'https://i.pravatar.cc/40?u=bob'
   },
   {
     id: 'client3',
@@ -79,7 +81,7 @@ export const clients: User[] = [
     unlockedBadgeIds: ['starter', 'session-master', 'discount-achiever'],
     completedStepIds: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     protocolId: 'adhd-standard',
-    referralCode: 'CARLA789'
+    referralCode: 'CARLA789',
   }
 ];
 
@@ -95,6 +97,7 @@ export const admins: User[] = [
         completedStepIds: [],
         protocolId: null,
         referralCode: 'ADMIN',
+        imageUrl: 'https://i.pravatar.cc/40?u=eve'
     }
 ]
 
