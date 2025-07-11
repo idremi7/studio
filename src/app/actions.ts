@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 // would interact with a database like Firestore.
 
 // DUMMY DATA MODIFICATION - In a real app, this would be a database call
-import { clients, protocol } from "@/lib/data";
+import { clients, protocols } from "@/lib/data";
 import type { Step } from "@/lib/types";
 
 /**
@@ -24,10 +24,20 @@ export async function completeStep(formData: FormData) {
 
   // Find the client and the step in our mock data
   const client = clients.find((c) => c.id === clientId);
+  
+  if (!client || !client.protocolId) {
+    return { success: false, message: "Client ou protocole du client introuvable." };
+  }
+  
+  const protocol = protocols.find(p => p.id === client.protocolId);
+  if (!protocol) {
+     return { success: false, message: "Protocole non trouvé pour ce client." };
+  }
+
   const step = protocol.steps.find((s) => s.id === stepId);
 
-  if (!client || !step) {
-    return { success: false, message: "Client ou étape introuvable." };
+  if (!step) {
+    return { success: false, message: "Étape introuvable dans le protocole du client." };
   }
 
   if (client.completedStepIds.includes(stepId)) {
@@ -83,17 +93,19 @@ export async function assignReferral(clientId: string, referrerCode: string) {
   return { success: true, message: "Parrain assigné." };
 }
 
-
 /**
  * Updates the name of a protocol.
  */
 export async function updateProtocolName(formData: FormData) {
   const protocolId = formData.get("protocolId") as string;
   const newName = formData.get("name") as string;
+  
+  const protocol = protocols.find(p => p.id === protocolId);
 
-  if (protocol.id === protocolId) {
+  if (protocol) {
     protocol.name = newName;
-    revalidatePath("/admin/protocols");
+    revalidatePath(`/admin/protocols/${protocolId}`);
+    revalidatePath(`/admin/protocols`);
     return { success: true, message: "Le nom du protocole a été mis à jour." };
   }
   return { success: false, message: "Protocole non trouvé." };
@@ -110,7 +122,8 @@ export async function saveProtocolStep(formData: FormData) {
   const points = Number(formData.get("points"));
   const bonusPoints = formData.get("bonusPoints") ? Number(formData.get("bonusPoints")) : 0;
 
-  if (protocol.id !== protocolId) {
+  const protocol = protocols.find(p => p.id === protocolId);
+  if (!protocol) {
     return { success: false, message: "Protocole non trouvé." };
   }
 
@@ -126,18 +139,43 @@ export async function saveProtocolStep(formData: FormData) {
     const stepIndex = protocol.steps.findIndex((s) => s.id === stepId);
     if (stepIndex > -1) {
       protocol.steps[stepIndex] = { ...protocol.steps[stepIndex], ...stepData };
-       revalidatePath("/admin/protocols");
+       revalidatePath(`/admin/protocols/${protocolId}`);
       return { success: true, message: "L'étape a été mise à jour." };
     }
     return { success: false, message: "Étape non trouvée." };
   } else {
     // Add new step
     const newStep: Step = {
-      id: Math.max(...protocol.steps.map(s => s.id)) + 1,
+      id: protocol.steps.length > 0 ? Math.max(...protocol.steps.map(s => s.id)) + 1 : 1,
       ...stepData,
     } as Step;
     protocol.steps.push(newStep);
-    revalidatePath("/admin/protocols");
+    revalidatePath(`/admin/protocols/${protocolId}`);
     return { success: true, message: "Une nouvelle étape a été ajoutée." };
   }
+}
+
+/**
+ * Creates a new protocol.
+ */
+export async function createProtocol(formData: FormData) {
+  const name = formData.get("name") as string;
+  if (!name) {
+    return { success: false, message: "Le nom du protocole est requis." };
+  }
+
+  const newProtocol = {
+    id: name.toLowerCase().replace(/\s+/g, '-'), // simple slug generation
+    name: name,
+    steps: [],
+  };
+
+  // Check for duplicate ID
+  if (protocols.some(p => p.id === newProtocol.id)) {
+     return { success: false, message: "Un protocole avec un ID similaire existe déjà." };
+  }
+
+  protocols.push(newProtocol);
+  revalidatePath("/admin/protocols");
+  return { success: true, message: "Nouveau protocole créé avec succès." };
 }

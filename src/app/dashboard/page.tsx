@@ -7,15 +7,24 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle2, Circle, Copy } from "lucide-react";
-import { badges, clients, protocol, DISCOUNT_THRESHOLD } from "@/lib/data";
+import { badges, clients, protocols, DISCOUNT_THRESHOLD } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import { notFound } from "next/navigation";
 
 const client = clients[0]; // Using mock data for a single client view
 
 export default function DashboardPage() {
   const progressPercentage = Math.min((client.neuroPoints / DISCOUNT_THRESHOLD) * 100, 100);
+
+  const protocol = protocols.find(p => p.id === client.protocolId);
+
+  if (!protocol) {
+    // In a real app, you'd want to handle this more gracefully
+    notFound();
+  }
+
 
   return (
     <div className="grid gap-4 md:gap-8 lg:grid-cols-3">
@@ -49,7 +58,7 @@ export default function DashboardPage() {
         
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">Votre Protocole</CardTitle>
+            <CardTitle className="font-headline">Votre Protocole: {protocol.name}</CardTitle>
             <CardDescription>Suivez les étapes de votre parcours d'entraînement.</CardDescription>
           </CardHeader>
           <CardContent>

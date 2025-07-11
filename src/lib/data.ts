@@ -10,26 +10,38 @@ export const badges: Badge[] = [
   { id: 'top-referrer', name: 'Parrain d\'Or', description: 'Parrainer 3 personnes', icon: Gem },
 ];
 
-export const protocol: Protocol = {
-  id: 'adhd-standard',
-  name: 'Protocole standard TDAH',
-  steps: [
-    { id: 1, name: 'Rencontre initiale', description: 'Première consultation et évaluation', points: 500 },
-    { id: 2, name: 'Évaluation EEG', description: 'Enregistrement de l\'activité cérébrale', points: 1000, bonusPoints: 250 },
-    { id: 3, name: 'Session d\'entraînement 1', description: 'Première session de neurofeedback', points: 625 },
-    { id: 4, name: 'Session d\'entraînement 2', description: 'Deuxième session de neurofeedback', points: 625 },
-    { id: 5, name: 'Session d\'entraînement 3', description: 'Troisième session de neurofeedback', points: 625 },
-    { id: 6, name: 'Session d\'entraînement 4', description: 'Quatrième session de neurofeedback', points: 625 },
-    { id: 7, name: 'Session d\'entraînement 5', description: 'Cinquième session de neurofeedback', points: 625, bonusPoints: 200 },
-    { id: 8, name: 'Évaluation intermédiaire', description: 'Bilan de mi-parcours', points: 800 },
-    { id: 9, name: 'Session d\'entraînement 6', description: 'Sixième session de neurofeedback', points: 625 },
-    { id: 10, name: 'Session d\'entraînement 7', description: 'Septième session de neurofeedback', points: 625 },
-    { id: 11, name: 'Session d\'entraînement 8', description: 'Huitième session de neurofeedback', points: 625 },
-    { id: 12, name: 'Session d\'entraînement 9', description: 'Neuvième session de neurofeedback', points: 625 },
-    { id: 13, name: 'Session d\'entraînement 10', description: 'Dixième session de neurofeedback', points: 625, bonusPoints: 500 },
-    { id: 14, name: 'Évaluation finale', description: 'Bilan de fin de parcours', points: 1500 },
-  ],
-};
+export const protocols: Protocol[] = [
+  {
+    id: 'adhd-standard',
+    name: 'Protocole standard TDAH',
+    steps: [
+      { id: 1, name: 'Rencontre initiale', description: 'Première consultation et évaluation', points: 500 },
+      { id: 2, name: 'Évaluation EEG', description: 'Enregistrement de l\'activité cérébrale', points: 1000, bonusPoints: 250 },
+      { id: 3, name: 'Session d\'entraînement 1', description: 'Première session de neurofeedback', points: 625 },
+      { id: 4, name: 'Session d\'entraînement 2', description: 'Deuxième session de neurofeedback', points: 625 },
+      { id: 5, name: 'Session d\'entraînement 3', description: 'Troisième session de neurofeedback', points: 625 },
+      { id: 6, name: 'Session d\'entraînement 4', description: 'Quatrième session de neurofeedback', points: 625 },
+      { id: 7, name: 'Session d\'entraînement 5', description: 'Cinquième session de neurofeedback', points: 625, bonusPoints: 200 },
+      { id: 8, name: 'Évaluation intermédiaire', description: 'Bilan de mi-parcours', points: 800 },
+      { id: 9, name: 'Session d\'entraînement 6', description: 'Sixième session de neurofeedback', points: 625 },
+      { id: 10, name: 'Session d\'entraînement 7', description: 'Septième session de neurofeedback', points: 625 },
+      { id: 11, name: 'Session d\'entraînement 8', description: 'Huitième session de neurofeedback', points: 625 },
+      { id: 12, name: 'Session d\'entraînement 9', description: 'Neuvième session de neurofeedback', points: 625 },
+      { id: 13, name: 'Session d\'entraînement 10', description: 'Dixième session de neurofeedback', points: 625, bonusPoints: 500 },
+      { id: 14, name: 'Évaluation finale', description: 'Bilan de fin de parcours', points: 1500 },
+    ],
+  },
+  {
+    id: 'anxiety-basic',
+    name: 'Protocole anxiété (base)',
+    steps: [
+        { id: 1, name: 'Consultation Initiale', description: 'Discussion des objectifs et évaluation', points: 500 },
+        { id: 2, name: 'Session de relaxation 1', description: 'Apprentissage des techniques de base', points: 700 },
+        { id: 3, name: 'Session de relaxation 2', description: 'Renforcement des acquis', points: 700, bonusPoints: 150 },
+        { id: 4, name: 'Bilan de progression', description: 'Évaluation des progrès et ajustements', points: 1000 },
+    ],
+  }
+];
 
 export const clients: User[] = [
   {

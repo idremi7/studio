@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { clients, protocol, badges, discountTiers, DISCOUNT_THRESHOLD } from "@/lib/data";
+import { clients, protocols, badges, discountTiers, DISCOUNT_THRESHOLD } from "@/lib/data";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, CheckCircle2, User, BrainCircuit } from "lucide-react";
@@ -26,6 +26,13 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
   const client = clients.find((c) => c.id === params.id);
 
   if (!client) {
+    notFound();
+  }
+
+  const protocol = protocols.find(p => p.id === client.protocolId);
+
+  if (!protocol) {
+    // Or render a message indicating no protocol is assigned
     notFound();
   }
 
@@ -77,7 +84,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="lg:col-span-4">
           <CardHeader>
-            <CardTitle className="font-headline">Progression du Protocole</CardTitle>
+            <CardTitle className="font-headline">Progression du Protocole: {protocol.name}</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>

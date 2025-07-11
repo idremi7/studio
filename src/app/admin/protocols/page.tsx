@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import {
   Card,
   CardContent,
@@ -13,77 +14,65 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { protocol } from "@/lib/data";
+import { protocols } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { Edit, PlusCircle } from "lucide-react";
-import EditProtocolNameForm from "./_components/EditProtocolNameForm";
-import EditStepDialog from "./_components/EditStepDialog";
+import { PlusCircle, ChevronRight, FileText } from "lucide-react";
+import AddProtocolDialog from './_components/AddProtocolDialog';
 
 export default function ProtocolsPage() {
-  const currentProtocol = protocol;
-
   return (
-    <div className="grid gap-4 md:gap-8">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="font-headline text-2xl">
-                Gestion du Protocole
-              </CardTitle>
-              <CardDescription>
-                Modifiez les détails et les étapes du protocole d'entraînement.
-              </CardDescription>
-            </div>
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="font-headline text-2xl">
+              Gestion des Protocoles
+            </CardTitle>
+            <CardDescription>
+              Affichez, créez ou modifiez les protocoles d'entraînement.
+            </CardDescription>
           </div>
-        </CardHeader>
-        <CardContent className="space-y-8">
-          <EditProtocolNameForm protocol={currentProtocol} />
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold font-headline">Étapes du Protocole</h3>
-               <EditStepDialog protocol={currentProtocol}>
-                  <Button>
-                    <PlusCircle className="mr-2 h-4 w-4" />
-                    Ajouter une étape
-                  </Button>
-                </EditStepDialog>
-            </div>
-            <div className="border rounded-lg">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                        <TableHead>Nom</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead className="text-center">Points</TableHead>
-                        <TableHead className="text-center">Bonus</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {currentProtocol.steps.map((step) => (
-                        <TableRow key={step.id}>
-                            <TableCell className="font-medium">{step.name}</TableCell>
-                            <TableCell className="text-muted-foreground">{step.description}</TableCell>
-                            <TableCell className="text-center">{step.points}</TableCell>
-                            <TableCell className="text-center">{step.bonusPoints || "—"}</TableCell>
-                            <TableCell className="text-right">
-                               <EditStepDialog protocol={currentProtocol} step={step}>
-                                    <Button variant="ghost" size="icon">
-                                        <Edit className="h-4 w-4" />
-                                        <span className="sr-only">Modifier</span>
-                                    </Button>
-                                </EditStepDialog>
-                            </TableCell>
-                        </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+          <AddProtocolDialog />
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="border rounded-lg">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nom du Protocole</TableHead>
+                <TableHead className="text-center">Nombre d'étapes</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {protocols.length > 0 ? (
+                protocols.map((protocol) => (
+                  <TableRow key={protocol.id}>
+                    <TableCell className="font-medium">{protocol.name}</TableCell>
+                    <TableCell className="text-center">{protocol.steps.length}</TableCell>
+                    <TableCell className="text-right">
+                      <Button asChild variant="outline" size="sm">
+                        <Link href={`/admin/protocols/${protocol.id}`}>
+                          Gérer <ChevronRight className="ml-2 h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                 <TableRow>
+                    <TableCell colSpan={3} className="h-24 text-center">
+                      <FileText className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
+                      <p className="font-medium">Aucun protocole trouvé.</p>
+                      <p className="text-muted-foreground text-sm">Commencez par en créer un nouveau.</p>
+                    </TableCell>
+                  </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
