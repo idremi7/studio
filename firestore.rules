@@ -1,0 +1,85 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions to check user authentication and roles.
+    // In a real application, the role would be stored in the user's custom claims
+    // during sign-up for more secure and efficient rule evaluation.
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isClient() {
+      return isSignedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'client';
+    }
+
+    function isAdmin() {
+      return isSignedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // --- Rules for Collections ---
+
+    // USERS collection
+    // - Anyone can create a user document (for signup).
+    // - Users can read their own data.
+    // - Admins can read any user's data.
+    // - Users can update their own non-critical data (e.g., name).
+    // - Critical fields like 'role', 'neuroPoints' should only be updated by backend functions (admins).
+    match /users/{userId} {
+      allow read: if isAdmin() || request.auth.uid == userId;
+      allow create: if isSignedIn();
+      allow update: if request.auth.uid == userId &&
+                       !('role' in request.resource.data) &&
+                       !('neuroPoints' in request.resource.data) &&
+                       !('currentDiscountLevel' in request.resource.data);
+      // Admin writes would be handled by Firebase Functions/Server Actions with admin privileges.
+    }
+    
+    // PROTOCOLS collection
+    // - Any signed-in user can read the protocols.
+    // - Only admins can create, update, or delete protocols.
+    match /protocols/{protocolId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // CLIENT_PROGRESS collection
+    // Stores the completed steps for each client.
+    // - A client can read their own progress.
+    // - Admins can read any client's progress.
+    // - Only admins (via backend functions) can write to a client's progress.
+    match /clientProgress/{userId} {
+      allow read: if isAdmin() || request.auth.uid == userId;
+      allow write: if isAdmin();
+    }
+
+    // BADGES collection
+    // - Publicly readable definitions of all available badges.
+    // - Only admins can manage badge definitions.
+    match /badges/{badgeId} {
+        allow read: if true;
+        allow write: if isAdmin();
+    }
+
+    // UNLOCKED_BADGES collection
+    // A subcollection under each user to store their unlocked badges.
+    // - A client can read their own unlocked badges.
+    // - Admins can read anyone's unlocked badges.
+    // - Only admins (via backend functions) can award badges.
+    match /users/{userId}/unlockedBadges/{badgeId} {
+       allow read: if isAdmin() || request.auth.uid == userId;
+       allow write: if isAdmin();
+    }
+    
+    // DISCOUNTS collection
+    // Stores a history of discounts applied for each client.
+    // - A client can read their own discount history.
+    // - Admins can read any client's discount history.
+    // - Only admins (via backend functions) can log a discount event.
+    match /discounts/{userId} {
+        allow read: if isAdmin() || request.auth.uid == userId;
+        allow write: if isAdmin();
+    }
+  }
+}
