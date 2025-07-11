@@ -13,10 +13,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { User, UserRole } from '@/lib/types';
-import { useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { admins, clients } from '@/lib/data';
 
-function getUser(role: UserRole | null): User | undefined {
+function getUser(pathname: string, role: UserRole | null): User | undefined {
+    if (pathname.startsWith('/admin')) return admins[0];
+    if (pathname.startsWith('/dashboard')) return clients[0];
     if (role === 'admin') return admins[0];
     if (role === 'client') return clients[0];
     return undefined;
@@ -24,8 +26,9 @@ function getUser(role: UserRole | null): User | undefined {
 
 export function AppHeader() {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const role = searchParams.get('role') as UserRole | null;
-  const user = getUser(role);
+  const user = getUser(pathname, role);
 
   if (!user) {
     return (

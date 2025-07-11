@@ -58,7 +58,7 @@ export default function LoginPage() {
               </Button>
               <p className="text-xs text-muted-foreground text-center">OU</p>
                <Button variant="outline" className="w-full" asChild>
-                <Link href="/dashboard?role=admin">
+                <Link href="/admin">
                   <GoogleIcon />
                   Se connecter en tant que Staff (Google)
                 </Link>
@@ -72,7 +72,7 @@ export default function LoginPage() {
               <CardTitle className="font-headline">Créer un compte</CardTitle>
               <CardDescription>
                 Rejoignez-nous pour commencer votre programme.
-              </CardDescription>
+              </Description>
             </CardHeader>
             <CardContent className="space-y-4">
                <div className="space-y-2">
