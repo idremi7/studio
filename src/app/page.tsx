@@ -9,7 +9,7 @@ export default function Home() {
       <header className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <BrainCircuit className="h-8 w-8 text-primary" />
-          <h1 className="text-xl font-bold font-headline text-primary">NeuroProgress</h1>
+          <h1 className="text-xl font-bold font-headline text-primary">DepartNeuro</h1>
         </div>
         <nav>
           <Button asChild variant="ghost">
