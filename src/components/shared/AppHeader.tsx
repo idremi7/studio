@@ -53,14 +53,14 @@ export function AppHeader() {
         </Link>
         <Link
           href={user.role === 'admin' ? '/admin' : '/dashboard'}
-          className="text-muted-foreground transition-colors hover:text-foreground"
+          className="whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground"
         >
           Tableau de bord
         </Link>
         {user.role === 'admin' && (
              <Link
                 href="/admin/protocols"
-                className="text-muted-foreground transition-colors hover:text-foreground"
+                className="whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground"
              >
                 Protocoles
             </Link>
